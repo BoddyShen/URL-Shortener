@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Shorten your URL</h1>
+{% if short_url %}
+<p>
+  Your shortened URL is:
+  <a href="{{ short_url }}"
+    >https://boddy123.pythonanywhere.com/url_shorten/{{ short_url }}</a
+  >
+</p>
+{% endif %}
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control"
+      name="long_url"
+      placeholder="Long URL"
+      required
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Shorten</button>
+</form>
+
+{% endblock %}
