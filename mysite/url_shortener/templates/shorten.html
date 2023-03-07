@@ -7,6 +7,8 @@
     >https://boddy123.pythonanywhere.com/url_shorten/{{ short_url }}</a
   >
 </p>
+{% endif %} {% if notExist %}
+<p>This shortened URL is not existed.</p>
 {% endif %}
 
 <form method="POST">
