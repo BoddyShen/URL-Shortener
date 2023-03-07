@@ -6,7 +6,6 @@ from .views import get_short_url
 
 
 class UrlShortenerTest(TestCase):
-    
     def setUp(self):
         self.client = Client()
 
@@ -21,23 +20,36 @@ class UrlShortenerTest(TestCase):
         self.long_url3 = 'https://www.example12345.com/'
         self.short_url3 = '9'
         self.url3 = Url.objects.create(long_url=self.long_url3, short_url=self.short_url3)
-        
-        
+
+        self.long_url4 = 'https://www.google.com/'
+        self.short_url4 = 'a'
+        self.url4 = Url.objects.create(long_url=self.long_url4, short_url=self.short_url4)
+
+    def test_shorten_url_get(self):
+        # Test GET request to shorten_url view
+        response = self.client.get(reverse('shorten'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shorten.html')
+
     def test_shorten_url_existing(self):
         # Test if the short url exists in the database
         response = self.client.post(reverse('shorten'), {'long_url': self.long_url1})
         self.assertContains(response, '7')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'shorten.html')
 
     def test_shorten_url_new(self):
         # Test if a new short url is created and saved to the database
         response = self.client.post(reverse('shorten'), {'long_url': self.long_url2})
         self.assertEqual(response.status_code, 200)
         self.assertRegex(response.content.decode(), r'[0-9a-zA-Z]+')
+        self.assertTemplateUsed(response, 'shorten.html')
 
         # Check if the url is saved to the database
         urls = Url.objects.filter(long_url=self.long_url2)
         self.assertEqual(urls.count(), 1)
         self.assertRegex(urls[0].short_url, r'[0-9a-zA-Z]+')
+        self.assertTemplateUsed(response, 'shorten.html')
 
         #check if the url in db is the same to the response from shorten_url in views
         self.assertContains(response, urls[0].short_url)
@@ -81,6 +93,25 @@ class UrlShortenerTest(TestCase):
         
         response = self.client.get(reverse('redirect', args=[self.short_url3]))
         self.assertRedirects(response, self.long_url3, fetch_redirect_response=False)
+
+        
+        response = self.client.get(reverse('redirect', args=[self.short_url4]), follow=True)
+        self.assertEqual(response.redirect_chain[0][0], self.long_url4)
+
+
+        '''
+        The test client is not capable of retrieving web pages that are not powered by your Django project. 
+        If you need to retrieve other web pages, use a Python standard library module such as urllib.
+        '''
+        
+        invalid_short_url = "www.not_in_db"
+        response = self.client.get(reverse('redirect', args=[invalid_short_url]))
+        self.assertEqual(response.status_code, 404)
+
+        
+
+
+       
 
         
 

@@ -40,6 +40,14 @@ def get_short_url():
 
 
 def redirect_url(request, short_url):
-    url = Url.objects.get(short_url=short_url)
-    print(url.long_url, url.short_url, "in views")
+    try:
+        url = Url.objects.get(short_url=short_url)
+        
+    
+    except Url.DoesNotExist:
+       
+        return render(request, 'shorten.html',{'notExist': True}, status=404)
+    
     return redirect(url.long_url)
+
+    
