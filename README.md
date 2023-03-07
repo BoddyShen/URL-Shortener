@@ -29,3 +29,21 @@ When a user inputs a long URL, the URL Shortener checks if the long URL already 
 
 When a user clicks a short URL, the web app looks up the corresponding long URL in the database and redirects the user to the long URL.
 
+# Coverage Report
+Name                                       Stmts   Miss  Cover
+--------------------------------------------------------------
+manage.py                                     12      2    83%
+mysite/__init__.py                             0      0   100%
+mysite/settings.py                            21      0   100%
+mysite/urls.py                                 3      0   100%
+url_shortener/__init__.py                      0      0   100%
+url_shortener/admin.py                         3      0   100%
+url_shortener/apps.py                          4      0   100%
+url_shortener/migrations/0001_initial.py       5      0   100%
+url_shortener/migrations/__init__.py           0      0   100%
+url_shortener/models.py                        4      0   100%
+url_shortener/tests.py                        68      0   100%
+url_shortener/urls.py                          3      0   100%
+url_shortener/views.py                        32      0   100%
+--------------------------------------------------------------
+TOTAL                                        155      2    99%
